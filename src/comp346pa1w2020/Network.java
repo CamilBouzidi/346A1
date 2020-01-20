@@ -554,10 +554,20 @@ public class Network {
     public void run()
     {	
     	System.out.println("\n DEBUG : Network.run() - starting network thread");
+    	Thread tNetwork = new Thread();
+    	tNetwork.start();
     	
     	while (true)
     	{
-		/* Implement the code for the run method */
+		/*if (client or server threads are still connected)
+		 *{
+		 *	Network must yield the CPU
+		 *} else {
+		 *	Ends when both the client and server threads have been disconnected.
+		 *}
+		 * 
+		 * 
+		 * */
     	}    
     }
 }

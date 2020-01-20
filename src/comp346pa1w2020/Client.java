@@ -213,6 +213,28 @@ public class Client {
     {   
     	Transactions transact = new Transactions();
     	long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
+    	
+    	//Client sending operations: will start before the client receiving operations.
+    	Thread threadSend = new Thread();
+    	sendClientStartTime = System.currentTimeMillis();
+    	threadSend.start();
+    	//Operation to send info to input buffer:
+    	/* transactions[] must be sent to the network.
+    	 * It must yield if the input buffer is full.
+    	 * 
+    	 */
+    	sendClientEndTime = System.currentTimeMillis();
+    	
+    	//Client receiving operations: ideally, this happens after the client sending operations and after the server has been started.
+    	Thread threadReceive = new Thread();
+    	receiveClientStartTime = System.currentTimeMillis();
+    	threadReceive.start();
+    	//Operation to receive info from output buffer:
+    	/* transactions[] will have been modified by the server and will be received here.
+    	 * It must yield if the output buffer is empty.
+    	 * 
+    	 */
+    	receiveClientEndTime = System.currentTimeMillis();
     
 	/* Implement the code for the run method */
     }
