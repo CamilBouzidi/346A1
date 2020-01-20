@@ -10,7 +10,7 @@ package comp346pa1w2020;
  *
  * @author Kerly Titus
  */
-public class comp546pa1driver {
+public class comp346pa1driver {
 
     /** 
      * main class
