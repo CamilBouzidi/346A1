@@ -310,18 +310,16 @@ public class Server extends Thread{
     public void run()
     {   
     	Transactions trans = new Transactions();
-    	long serverStartTime=0, serverEndTime=0;
+    	long serverStartTime=0;
 
     	System.out.println("\n DEBUG : Server.run() - starting server thread " + objNetwork.getServerConnectionStatus());
     	
-    	while(!objNetwork.getServerConnectionStatus().equals("disconnected")) {
-    		//Receives info from the input buffer and sends info to the output buffer after the transformations
-    		if(objNetwork.getInBufferStatus().equals("full")) {
-    			processTransactions(objNetwork.transferIn());
-    		}
-        	//get here when the client is disconnected
-    	}
-    	
+
+    	processTransactions(trans);
+
+        //get here when the client is disconnected
+    
+    	long serverEndTime=0;
         System.out.println("\n Terminating server thread - " + " Running time " + (serverEndTime - serverStartTime) + " milliseconds");
            
     }

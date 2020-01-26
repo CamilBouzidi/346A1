@@ -224,7 +224,7 @@ public class Client extends Thread{
     		//returns when all transactions are sent
     		sendTransactions();
 		} else {
-			
+			receiveTransactions(transact);
 		}
     	
     	
