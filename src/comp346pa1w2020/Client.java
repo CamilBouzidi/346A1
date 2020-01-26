@@ -212,23 +212,38 @@ public class Client extends Thread{
     public void run()
     {   
     	Transactions transact = new Transactions();
-    	//long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
+    	long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
     	
     	//Client sending operations: will start before the client receiving operations.
-    	long before = System.currentTimeMillis();
+    	sendClientStartTime = System.currentTimeMillis();
     	//Operation to send info to input buffer:
     	/* transactions[] must be sent to the network.
     	 * It must yield if the input buffer is full.
     	 */
     	if (this.clientOperation.equals("sending")) {
     		//returns when all transactions are sent
-    		sendTransactions();
+    		
+    		while((!this.objNetwork.getInBufferStatus().equals("full"))||(!this.objNetwork.getOutBufferStatus().equals("empty"))) {
+    			System.err.println("The client is sending");
+    			sendTransactions();
+    		}
+    		while ((this.objNetwork.getInBufferStatus().equals("full"))||(this.objNetwork.getOutBufferStatus().equals("empty"))) {
+    			System.err.println("The client must stop sending");
+    			yield();
+    		}
 		} else {
-			receiveTransactions(transact);
+			while((!this.objNetwork.getInBufferStatus().equals("full"))||(!this.objNetwork.getOutBufferStatus().equals("empty"))) {
+    			System.err.println("The client is receiving");
+    			receiveTransactions(transact);
+    		}
+    		while ((this.objNetwork.getInBufferStatus().equals("full"))||(this.objNetwork.getOutBufferStatus().equals("empty"))) {
+    			System.err.println("The client must stop receiving");
+    			yield();
+    		}	
 		}
     	
     	
-    	long after = System.currentTimeMillis();
+    	sendClientEndTime = System.currentTimeMillis();
     	
     	//Client receiving operations: ideally, this happens after the client sending operations and after the server has been started.
     	//Operation to receive info from output buffer:

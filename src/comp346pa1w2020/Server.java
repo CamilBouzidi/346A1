@@ -314,8 +314,14 @@ public class Server extends Thread{
 
     	System.out.println("\n DEBUG : Server.run() - starting server thread " + objNetwork.getServerConnectionStatus());
     	
-
-    	processTransactions(trans);
+    	while ((!this.objNetwork.getInBufferStatus().equals("empty"))||(!this.objNetwork.getOutBufferStatus().equals("full"))) {
+    		System.err.println("Server is processing");
+    		processTransactions(trans);
+    	}
+    	while ((!this.objNetwork.getInBufferStatus().equals("empty"))||(!this.objNetwork.getOutBufferStatus().equals("full"))) {
+    		System.err.println("Server must yield");
+    		yield();
+    	}
 
         //get here when the client is disconnected
     

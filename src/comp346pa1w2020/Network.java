@@ -563,18 +563,12 @@ public class Network extends Thread{
 			 *	Ends when both the client and server threads have been disconnected.
 			 *}
 			 * */
-    		boolean idle = clientConnectionStatus.equals("idle") || serverConnectionStatus.endsWith("idle");
-    		boolean connected = clientConnectionStatus.equals("connected") || serverConnectionStatus.endsWith("connected");
+    		while ((clientConnectionStatus.equals("connected"))||(serverConnectionStatus.equals("connected"))) {
+    			yield();
+    		}
     		if (clientConnectionStatus.equals("disconnected") && serverConnectionStatus.endsWith("disconnected")) {
     			break;
 			}
-    		else if(idle) {
-    			
-    		}
-    		else {
-				yield();
-			}
-    	
     	}    
     }
 }
