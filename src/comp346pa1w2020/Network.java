@@ -10,7 +10,7 @@ package comp346pa1w2020;
  *
  * @author Kerly Titus
  */
-public class Network {
+public class Network extends Thread{
     
     private static int maxNbPackets;                           /* Maximum number of simultaneous transactions handled by the network buffer */
     private static int inputIndexClient, inputIndexServer, outputIndexServer, outputIndexClient;                   /* Network buffer indices for accessing the input buffer (inputIndexClient, outputIndexServer) and output buffer (inputIndexServer, outputIndexClient) */
@@ -554,20 +554,27 @@ public class Network {
     public void run()
     {	
     	System.out.println("\n DEBUG : Network.run() - starting network thread");
-    	Thread tNetwork = new Thread();
-    	tNetwork.start();
-    	
     	while (true)
     	{
-		/*if (client or server threads are still connected)
-		 *{
-		 *	Network must yield the CPU
-		 *} else {
-		 *	Ends when both the client and server threads have been disconnected.
-		 *}
-		 * 
-		 * 
-		 * */
+			/*if (client or server threads are still connected)
+			 *{
+			 *	Network must yield the CPU
+			 *} else {
+			 *	Ends when both the client and server threads have been disconnected.
+			 *}
+			 * */
+    		boolean idle = clientConnectionStatus.equals("idle") || serverConnectionStatus.endsWith("idle");
+    		boolean connected = clientConnectionStatus.equals("connected") || serverConnectionStatus.endsWith("connected");
+    		if (clientConnectionStatus.equals("disconnected") && serverConnectionStatus.endsWith("disconnected")) {
+    			break;
+			}
+    		else if(idle) {
+    			
+    		}
+    		else {
+				yield();
+			}
+    	
     	}    
     }
 }

@@ -10,14 +10,13 @@ import java.util.InputMismatchException;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/*package comp546pa1w2020;*/
 
 /** Server class
  *
  * @author Kerly Titus
  */
 
-public class Server {
+public class Server extends Thread{
   
 	int numberOfTransactions;         /* Number of transactions handled by the server */
 	int numberOfAccounts;             /* Number of accounts stored in the server */
@@ -42,7 +41,7 @@ public class Server {
       account = new Accounts[maxNbAccounts];
       objNetwork = new Network("server");
       System.out.println("\n Inializing the Accounts database ...");
-      initializeAccounts( );
+      initializeAccounts();
       System.out.println("\n Connecting server to network ...");
       if (!(objNetwork.connect(objNetwork.getServerIP())))
       {
@@ -309,14 +308,20 @@ public class Server {
      * @param
      */
     public void run()
-    {   Transactions trans = new Transactions();
+    {   
+    	Transactions trans = new Transactions();
     	long serverStartTime=0, serverEndTime=0;
 
     	System.out.println("\n DEBUG : Server.run() - starting server thread " + objNetwork.getServerConnectionStatus());
     	
-    	/* Implement the code for the run method */
-    	//Receives info from the input buffer and sends info to the output buffer after the transformations
-        
+    	while(!objNetwork.getServerConnectionStatus().equals("disconnected")) {
+    		//Receives info from the input buffer and sends info to the output buffer after the transformations
+    		if(objNetwork.getInBufferStatus().equals("full")) {
+    			processTransactions(objNetwork.transferIn());
+    		}
+        	//get here when the client is disconnected
+    	}
+    	
         System.out.println("\n Terminating server thread - " + " Running time " + (serverEndTime - serverStartTime) + " milliseconds");
            
     }

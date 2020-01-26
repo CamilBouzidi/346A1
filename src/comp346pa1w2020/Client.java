@@ -16,7 +16,7 @@ import java.util.InputMismatchException;
  * @author Kerly Titus
  */
 
-public class Client { 
+public class Client extends Thread{ 
     
     private static int numberOfTransactions;   		/* Number of transactions to process */
     private static int maxNbTransactions;      		/* Maximum number of transactions */
@@ -212,30 +212,30 @@ public class Client {
     public void run()
     {   
     	Transactions transact = new Transactions();
-    	long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
+    	//long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
     	
     	//Client sending operations: will start before the client receiving operations.
-    	Thread threadSend = new Thread();
-    	sendClientStartTime = System.currentTimeMillis();
-    	threadSend.start();
+    	long before = System.currentTimeMillis();
     	//Operation to send info to input buffer:
     	/* transactions[] must be sent to the network.
     	 * It must yield if the input buffer is full.
-    	 * 
     	 */
-    	sendClientEndTime = System.currentTimeMillis();
+    	if (this.clientOperation.equals("sending")) {
+    		//returns when all transactions are sent
+    		sendTransactions();
+		} else {
+			
+		}
+    	
+    	
+    	long after = System.currentTimeMillis();
     	
     	//Client receiving operations: ideally, this happens after the client sending operations and after the server has been started.
-    	Thread threadReceive = new Thread();
-    	receiveClientStartTime = System.currentTimeMillis();
-    	threadReceive.start();
     	//Operation to receive info from output buffer:
     	/* transactions[] will have been modified by the server and will be received here.
     	 * It must yield if the output buffer is empty.
-    	 * 
     	 */
-    	receiveClientEndTime = System.currentTimeMillis();
     
-	/* Implement the code for the run method */
+	/* TODO: Implement the code for the run method */
     }
 }
