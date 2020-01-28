@@ -163,7 +163,10 @@ public class Client extends Thread{
             transaction[i].setTransactionStatus("sent");   /* Set current transaction status */
            
             System.out.println("\n DEBUG : Client.sendTransactions() - sending transaction on account " + transaction[i].getAccountNumber());
-            
+            while (objNetwork.getInBufferStatus().equals("full")) {
+                //System.out.println("\n // During sending operation, input buffer full - Yielding the client //");
+                yield();
+            }
             objNetwork.send(transaction[i]);                            /* Transmit current transaction */
             i++;
          }
@@ -182,7 +185,9 @@ public class Client extends Thread{
          
          while (i < getNumberOfTransactions())
          {     
-        	 // while( objNetwork.getOutBufferStatus().equals("empty"));  	/* Alternatively, busy-wait until the network output buffer is available */
+        	 while(objNetwork.getOutBufferStatus().equals("empty")) {
+        		 yield();
+        	 }
                                                                         	
             objNetwork.receive(transact);                               	/* Receive updated transaction from the network buffer */
             
@@ -222,6 +227,7 @@ public class Client extends Thread{
     	 */
     	if (this.clientOperation.equals("sending")) {
     		//returns when all transactions are sent
+    		System.out.println(" \n DEBUG: Sending client thread now operates!");
     		sendTransactions();
 		} else {
 			receiveTransactions(transact);
@@ -229,6 +235,8 @@ public class Client extends Thread{
     	
     	
     	long after = System.currentTimeMillis();
+    	objNetwork.disconnect(objNetwork.getClientIP());
+    	System.out.println("Terminating thread, Client, mode: " + this.clientOperation + ", Execution time(ms): " + (after-before));
     	
     	//Client receiving operations: ideally, this happens after the client sending operations and after the server has been started.
     	//Operation to receive info from output buffer:

@@ -565,16 +565,15 @@ public class Network extends Thread{
 			 * */
     		boolean idle = clientConnectionStatus.equals("idle") || serverConnectionStatus.endsWith("idle");
     		boolean connected = clientConnectionStatus.equals("connected") || serverConnectionStatus.endsWith("connected");
-    		if (clientConnectionStatus.equals("disconnected") && serverConnectionStatus.endsWith("disconnected")) {
+    		if (clientConnectionStatus.equals("disconnected") && serverConnectionStatus.equals("disconnected")) {
     			break;
 			}
-    		else if(idle) {
-    			
-    		}
+    		// what if it's idle, should the network do something in particular?
     		else {
 				yield();
 			}
     	
     	}    
+    	System.out.println("\n DEBUG : Network thread TERMINATED - Client and Server disconnected");
     }
 }
