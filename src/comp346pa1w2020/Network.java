@@ -373,8 +373,8 @@ public class Network extends Thread{
             if (getinputIndexClient() == getoutputIndexServer())
             {	
             	setInBufferStatus("full");
-            
             	System.out.println("\n DEBUG : Network.send() - inComingBuffer status " + getInBufferStatus());
+            	yield();
             }
             else
             	setInBufferStatus("normal");
@@ -406,6 +406,7 @@ public class Network extends Thread{
             	setOutBufferStatus("empty");
             
             	System.out.println("\n DEBUG : Network.receive() - outGoingBuffer status " + getOutBufferStatus());
+            	yield();
             }
             else
             	setOutBufferStatus("normal"); 
@@ -554,15 +555,9 @@ public class Network extends Thread{
     public void run()
     {	
     	System.out.println("\n DEBUG : Network.run() - starting network thread");
+    	long start = System.currentTimeMillis();
     	while (true)
     	{
-			/*if (client or server threads are still connected)
-			 *{
-			 *	Network must yield the CPU
-			 *} else {
-			 *	Ends when both the client and server threads have been disconnected.
-			 *}
-			 * */
     		boolean idle = clientConnectionStatus.equals("idle") || serverConnectionStatus.endsWith("idle");
     		boolean connected = clientConnectionStatus.equals("connected") || serverConnectionStatus.endsWith("connected");
     		if (clientConnectionStatus.equals("disconnected") && serverConnectionStatus.equals("disconnected")) {
@@ -574,6 +569,8 @@ public class Network extends Thread{
 			}
     	
     	}    
+    	long end = System.currentTimeMillis();
+    	System.out.println("\n Network execution time(ms): " + (end - start));
     	System.out.println("\n DEBUG : Network thread TERMINATED - Client and Server disconnected");
     }
 }

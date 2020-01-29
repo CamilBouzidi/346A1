@@ -200,7 +200,7 @@ public class Server extends Thread{
             	 //System.out.println("\n // During process transaction, output buffer full or input buffer empty - Yielding the server //");
                  Thread.yield();
              }
-             else if ((objNetwork.getInBufferStatus().equals("full"))){
+             else if (objNetwork.getInBufferStatus().equals("full") || objNetwork.getInBufferStatus().equals("normal")){
 	        	 while (!objNetwork.getInBufferStatus().equals("empty"))
 	        	 {
 	        		 System.out.println("\n DEBUG : Server.processTransactions() - transferring in account " + trans.getAccountNumber());
