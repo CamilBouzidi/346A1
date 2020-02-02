@@ -140,7 +140,7 @@ public class Client extends Thread{
         }
         setNumberOfTransactions(i);		/* Record the number of transactions processed */
         
-        System.out.println("\n DEBUG : Client.readTransactions() - " + getNumberOfTransactions() + " transactions processed");
+        //System.out.println(" \n DEBUG : Client.readTransactions() - " + getNumberOfTransactions() + " transactions processed");
         
         inputStream.close( );
 
@@ -159,11 +159,14 @@ public class Client extends Thread{
          while (i < getNumberOfTransactions())
          {  
             // while( objNetwork.getInBufferStatus().equals("full") );     /* Alternatively, busy-wait until the network input buffer is available */
-                                             	
+        	
+            while (objNetwork.getInBufferStatus().equals("full"))
+            {
+                 //System.out.println("\n // During sending operation, input buffer full - Yielding the client //");
+                 yield();
+            }
+            //System.out.println(" \n DEBUG : Client.sendTransactions() - sending transaction on account " + transaction[i].getAccountNumber());
             transaction[i].setTransactionStatus("sent");   /* Set current transaction status */
-           
-            System.out.println("\n DEBUG : Client.sendTransactions() - sending transaction on account " + transaction[i].getAccountNumber());
-            
             objNetwork.send(transaction[i]);                            /* Transmit current transaction */
             i++;
          }
@@ -182,11 +185,15 @@ public class Client extends Thread{
          
          while (i < getNumberOfTransactions())
          {     
-        	 // while( objNetwork.getOutBufferStatus().equals("empty"));  	/* Alternatively, busy-wait until the network output buffer is available */
+        	 while(objNetwork.getOutBufferStatus().equals("empty"))
+        	 {
+        		 //System.out.println("\n // During sending operation, output buffer empty - Yielding the client //");
+        		 yield();
+        	 }
                                                                         	
             objNetwork.receive(transact);                               	/* Receive updated transaction from the network buffer */
             
-            System.out.println("\n DEBUG : Client.receiveTransactions() - receiving updated transaction on account " + transact.getAccountNumber());
+            //System.out.println(" \n DEBUG : Client.receiveTransactions() - receiving updated transaction on account " + transact.getAccountNumber());
             
             System.out.println(transact);                               	/* Display updated transaction */    
             i++;
@@ -212,38 +219,27 @@ public class Client extends Thread{
     public void run()
     {   
     	Transactions transact = new Transactions();
-    	long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
+    	//long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
     	
     	//Client sending operations: will start before the client receiving operations.
-    	sendClientStartTime = System.currentTimeMillis();
+    	long before = System.currentTimeMillis();
     	//Operation to send info to input buffer:
     	/* transactions[] must be sent to the network.
     	 * It must yield if the input buffer is full.
     	 */
     	if (this.clientOperation.equals("sending")) {
     		//returns when all transactions are sent
-    		
-    		while((!this.objNetwork.getInBufferStatus().equals("full"))||(!this.objNetwork.getOutBufferStatus().equals("empty"))) {
-    			System.err.println("The client is sending");
-    			sendTransactions();
-    		}
-    		while ((this.objNetwork.getInBufferStatus().equals("full"))||(this.objNetwork.getOutBufferStatus().equals("empty"))) {
-    			System.err.println("The client must stop sending");
-    			yield();
-    		}
+    		//System.out.println(" \n DEBUG: Client.run() - starting client sending thread connected");
+    		sendTransactions();
 		} else {
-			while((!this.objNetwork.getInBufferStatus().equals("full"))||(!this.objNetwork.getOutBufferStatus().equals("empty"))) {
-    			System.err.println("The client is receiving");
-    			receiveTransactions(transact);
-    		}
-    		while ((this.objNetwork.getInBufferStatus().equals("full"))||(this.objNetwork.getOutBufferStatus().equals("empty"))) {
-    			System.err.println("The client must stop receiving");
-    			yield();
-    		}	
+			//System.out.println(" \n DEBUG: Client.run() - starting client receiving thread connected");
+			receiveTransactions(transact);
 		}
     	
     	
-    	sendClientEndTime = System.currentTimeMillis();
+    	long after = System.currentTimeMillis();
+    	objNetwork.disconnect(objNetwork.getClientIP());
+    	System.out.println("Terminating thread, Client, mode: " + this.clientOperation + ", Execution time(ms): " + (after-before));
     	
     	//Client receiving operations: ideally, this happens after the client sending operations and after the server has been started.
     	//Operation to receive info from output buffer:
