@@ -357,6 +357,7 @@ public class Network extends Thread{
      */
          public boolean send(Transactions inPacket)
         {
+        	while(getInBufferStatus().equals)
             inComingPacket[inputIndexClient].setAccountNumber(inPacket.getAccountNumber());
             inComingPacket[inputIndexClient].setOperationType(inPacket.getOperationType());
             inComingPacket[inputIndexClient].setTransactionAmount(inPacket.getTransactionAmount());
@@ -374,7 +375,7 @@ public class Network extends Thread{
             {	
             	setInBufferStatus("full");
             	System.out.println("\n DEBUG : Network.send() - inComingBuffer status " + getInBufferStatus());
-            	yield();
+            	//yield();
             }
             else
             	setInBufferStatus("normal");
@@ -406,7 +407,7 @@ public class Network extends Thread{
             	setOutBufferStatus("empty");
             
             	System.out.println("\n DEBUG : Network.receive() - outGoingBuffer status " + getOutBufferStatus());
-            	yield();
+            	//yield();
             }
             else
             	setOutBufferStatus("normal"); 
@@ -438,8 +439,8 @@ public class Network extends Thread{
             if ( getinputIndexServer( ) == getoutputIndexClient( ))
             {
                 setOutBufferStatus("full");
-                
                 System.out.println("\n DEBUG : Network.transferOut() - outGoingBuffer status " + getOutBufferStatus());
+                //yield();
             }
             else
                 setOutBufferStatus("normal");
@@ -455,7 +456,7 @@ public class Network extends Thread{
      */
          public boolean transferIn(Transactions inPacket)
         {
-		System.out.println("\n DEBUG : Network.transferIn - account number " + inComingPacket[outputIndexServer].getAccountNumber());
+        	System.out.println("\n DEBUG : Network.transferIn - account number " + inComingPacket[outputIndexServer].getAccountNumber());
             inPacket.setAccountNumber(inComingPacket[outputIndexServer].getAccountNumber());
             inPacket.setOperationType(inComingPacket[outputIndexServer].getOperationType());
             inPacket.setTransactionAmount(inComingPacket[outputIndexServer].getTransactionAmount());
@@ -471,8 +472,8 @@ public class Network extends Thread{
             if ( getoutputIndexServer( ) == getinputIndexClient( ))
             {
                 setInBufferStatus("empty");
-                
                 System.out.println("\n DEBUG : Network.transferIn() - inComingBuffer status " + getInBufferStatus());
+                //yield();
             }
             else
                 setInBufferStatus("normal");

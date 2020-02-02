@@ -261,7 +261,7 @@ public class Server extends Thread{
      * @return balance
      * @param i, amount
      */
-     public double deposit(int i, double amount)
+     private double deposit(int i, double amount)
      {  double curBalance;      /* Current account balance */
         
         curBalance = account[i].getBalance( );          /* Get current account balance */
@@ -275,7 +275,7 @@ public class Server extends Thread{
      * @return balance
      * @param i, amount
      */
-     public double withdraw(int i, double amount)
+     private double withdraw(int i, double amount)
      {  double curBalance;      /* Current account balance */
         
         curBalance = account[i].getBalance( );          /* Get current account balance */

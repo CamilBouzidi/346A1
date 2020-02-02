@@ -218,14 +218,9 @@ public class Client extends Thread{
     public void run()
     {   
     	Transactions transact = new Transactions();
-    	//long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
     	
     	//Client sending operations: will start before the client receiving operations.
     	long before = System.currentTimeMillis();
-    	//Operation to send info to input buffer:
-    	/* transactions[] must be sent to the network.
-    	 * It must yield if the input buffer is full.
-    	 */
     	if (this.clientOperation.equals("sending")) {
     		//returns when all transactions are sent
     		System.out.println(" \n DEBUG: Sending client thread now operates!");
@@ -244,7 +239,5 @@ public class Client extends Thread{
     	/* transactions[] will have been modified by the server and will be received here.
     	 * It must yield if the output buffer is empty.
     	 */
-    
-	/* TODO: Implement the code for the run method */
     }
 }
