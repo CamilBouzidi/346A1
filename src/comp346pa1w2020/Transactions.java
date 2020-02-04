@@ -10,7 +10,7 @@ package comp346pa1w2020;
  *
  * @author Kerly Titus
  */
-public class Transactions {
+public class Transactions{
     
     private String accountNumber;       /* Account number */
     private String operationType;       /* Operation type : deposit, withdrawal, query */
