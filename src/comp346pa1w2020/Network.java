@@ -373,7 +373,7 @@ public class Network extends Thread{
             if (getinputIndexClient() == getoutputIndexServer())
             {	
             	setInBufferStatus("full");
-            	yield();
+            	//yield();
             	//System.out.println("\n DEBUG : Network.send() - inComingBuffer status " + getInBufferStatus());
             }
             else
@@ -404,7 +404,7 @@ public class Network extends Thread{
             if ( getoutputIndexClient( ) == getinputIndexServer( ))
             {	
             	setOutBufferStatus("empty");
-            	yield();
+            	//yield();
             	//System.out.println("\n DEBUG : Network.receive() - outGoingBuffer status " + getOutBufferStatus());
             }
             else
@@ -557,7 +557,8 @@ public class Network extends Thread{
     	long start = System.currentTimeMillis();
     	while (true)
     	{
-    		if (clientConnectionStatus.equals("disconnected") && serverConnectionStatus.equals("disconnected")) {
+    		if (clientConnectionStatus.equals("disconnected") && serverConnectionStatus.equals("disconnected") && outBufferStatus.equals("empty")) {
+    			//System.out.println("everything disconnected");
     			break;
 			}
     		// what if it's idle, should the network do something in particular?
