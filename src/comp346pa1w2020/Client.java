@@ -239,7 +239,7 @@ public class Client extends Thread{
     	
     	long after = System.currentTimeMillis();
     	objNetwork.disconnect(objNetwork.getClientIP());
-    	System.out.println("Terminating thread, Client, mode: " + this.clientOperation + ", Execution time(ms): " + (after-before));
+    	System.out.println("\n Terminating thread, Client, mode: " + this.clientOperation + ", Execution time(ms): " + (after-before));
     	
     	//Client receiving operations: ideally, this happens after the client sending operations and after the server has been started.
     	//Operation to receive info from output buffer:
