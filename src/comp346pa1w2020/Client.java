@@ -186,7 +186,7 @@ public class Client extends Thread{
          
          while (i < getNumberOfTransactions())
          {    
-        	 System.out.println("At beginning of receiveTransactions for transaction "+i+", output buffer is "+objNetwork.getOutBufferStatus());
+        	 //System.out.println("At beginning of receiveTransactions for transaction "+i+", output buffer is "+objNetwork.getOutBufferStatus());
         	 while(objNetwork.getOutBufferStatus().equals("empty"))
         	 {
         		 //System.out.println("\n // During receiving operation, output buffer empty - Yielding the client //");
@@ -199,10 +199,10 @@ public class Client extends Thread{
             
             System.out.println(transact);                               	/* Display updated transaction */    
             i++;
-            System.out.println("Transaction: "+i+" with max of "+getNumberOfTransactions());
+            //System.out.println("Transaction: "+i+" with max of "+getNumberOfTransactions());
          }
          
-         System.out.println("At the very end of receiveTransaction, outputBuffer is "+objNetwork.getOutBufferStatus());
+         //System.out.println("At the very end of receiveTransaction, outputBuffer is "+objNetwork.getOutBufferStatus());
          //while(!objNetwork.getOutBufferStatus().equals("empty"))
     	 //{
     		 //System.out.println("At the very end of receiveTransaction, outputBuffer is "+objNetwork.getOutBufferStatus());
@@ -242,9 +242,9 @@ public class Client extends Thread{
     		//System.out.println(" \n DEBUG: Client.run() - starting client sending thread connected");
     		sendTransactions();
 		} else {
-			System.out.println(" \n DEBUG: Client.run() - starting client receiving thread connected");
+			//System.out.println(" \n DEBUG: Client.run() - starting client receiving thread connected");
 			receiveTransactions(transact);
-			System.out.println("From the receiving client, output buffer status is "+this.objNetwork.getOutBufferStatus());
+			//System.out.println("From the receiving client, output buffer status is "+this.objNetwork.getOutBufferStatus());
 		}
     	
     	
