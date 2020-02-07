@@ -166,6 +166,7 @@ public class Client extends Thread{
                  yield();
             }
             //System.out.println(" \n DEBUG : Client.sendTransactions() - sending transaction on account " + transaction[i].getAccountNumber());
+            //System.out.println(" \n DEBUG : Client.sendTransactions() - transaction number " + i);
             transaction[i].setTransactionStatus("sent");   /* Set current transaction status */
             objNetwork.send(transaction[i]);                            /* Transmit current transaction */
             i++;
@@ -184,10 +185,11 @@ public class Client extends Thread{
          int i = 0;     /* Index of transaction array */
          
          while (i < getNumberOfTransactions())
-         {     
+         {    
+        	 System.out.println("At beginning of receiveTransactions for transaction "+i+", output buffer is "+objNetwork.getOutBufferStatus());
         	 while(objNetwork.getOutBufferStatus().equals("empty"))
         	 {
-        		 //System.out.println("\n // During sending operation, output buffer empty - Yielding the client //");
+        		 //System.out.println("\n // During receiving operation, output buffer empty - Yielding the client //");
         		 yield();
         	 }
                                                                         	
@@ -197,7 +199,15 @@ public class Client extends Thread{
             
             System.out.println(transact);                               	/* Display updated transaction */    
             i++;
-         } 
+            System.out.println("Transaction: "+i+" with max of "+getNumberOfTransactions());
+         }
+         
+         System.out.println("At the very end of receiveTransaction, outputBuffer is "+objNetwork.getOutBufferStatus());
+         //while(!objNetwork.getOutBufferStatus().equals("empty"))
+    	 //{
+    		 //System.out.println("At the very end of receiveTransaction, outputBuffer is "+objNetwork.getOutBufferStatus());
+    		 //yield();
+    	 //} 
     }
      
     /** 
@@ -232,8 +242,9 @@ public class Client extends Thread{
     		//System.out.println(" \n DEBUG: Client.run() - starting client sending thread connected");
     		sendTransactions();
 		} else {
-			//System.out.println(" \n DEBUG: Client.run() - starting client receiving thread connected");
+			System.out.println(" \n DEBUG: Client.run() - starting client receiving thread connected");
 			receiveTransactions(transact);
+			System.out.println("From the receiving client, output buffer status is "+this.objNetwork.getOutBufferStatus());
 		}
     	
     	

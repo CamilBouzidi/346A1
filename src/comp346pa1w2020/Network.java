@@ -410,6 +410,7 @@ public class Network extends Thread{
             else
             	setOutBufferStatus("normal"); 
             
+             System.out.println("From the network (receive), outputBuffer is "+outBufferStatus);
              return true;
         }   
     
@@ -443,6 +444,7 @@ public class Network extends Thread{
             else
                 setOutBufferStatus("normal");
             
+             //System.out.println("From the network (transferOut), outputBuffer is "+outBufferStatus);
              return true;
         }   
          
@@ -475,6 +477,7 @@ public class Network extends Thread{
             }
             else
                 setInBufferStatus("normal");
+            
             
              return true;
         }   
@@ -557,9 +560,11 @@ public class Network extends Thread{
     	long start = System.currentTimeMillis();
     	while (true)
     	{
-    		if (clientConnectionStatus.equals("disconnected") && serverConnectionStatus.equals("disconnected") && outBufferStatus.equals("empty")) {
-    			//System.out.println("everything disconnected");
-    			break;
+    		if (clientConnectionStatus.equals("disconnected") && outBufferStatus.equals("empty")) {
+    			if (serverConnectionStatus.equals("disconnected")) {
+    				break;
+    			}
+    			
 			}
     		// what if it's idle, should the network do something in particular?
     		else {

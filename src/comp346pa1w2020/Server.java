@@ -196,7 +196,7 @@ public class Server extends Thread{
         	 /* while( (objNetwork.getInBufferStatus().equals("empty"))); */  /* Alternatively, busy-wait until the network input buffer is available */
 
          
-             while(objNetwork.getInBufferStatus().equals("empty")){
+             while(objNetwork.getInBufferStatus().equals("empty")&&!objNetwork.getClientConnectionStatus().equals("disconnected")){
             	 //System.out.println("\n // During process transaction, input buffer empty - Yielding the server //");
                  yield();
              }
@@ -239,7 +239,7 @@ public class Server extends Thread{
 	                            //System.out.println("\n DEBUG : Server.processTransactions() - Obtaining balance from account" + trans.getAccountNumber());
 	        				 }
 	
-	        		 while( (objNetwork.getOutBufferStatus().equals("full"))) {
+	        		 while( (objNetwork.getOutBufferStatus().equals("full")&& (!objNetwork.getClientConnectionStatus().equals("disconnected")))) {
 	        			 yield();
 	        		 }
 	
@@ -329,11 +329,16 @@ public class Server extends Thread{
 
     	processTransactions(trans);
 
-        //get here when the client is disconnected
-    
+        //get here when the client is disconnected - only happens once both the buffers are empty
+    	while ((!objNetwork.getClientConnectionStatus().equals("empty"))&&(!objNetwork.getOutBufferStatus().equals("empty"))) {
+    		//System.out.println("Receiving Client is "+objNetwork.getClientConnectionStatus()+" and Output buffer is "+objNetwork.getOutBufferStatus());
+    		yield();
+    	}
+    	
     	long serverEndTime=System.currentTimeMillis();
+    	System.out.println("\n Terminating server thread - " + " Running time " + (serverEndTime - serverStartTime) + " milliseconds");
     	objNetwork.disconnect(objNetwork.getServerIP());
-        System.out.println("\n Terminating server thread - " + " Running time " + (serverEndTime - serverStartTime) + " milliseconds");
+        
            
     }
 }
