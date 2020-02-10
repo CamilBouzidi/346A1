@@ -17,11 +17,7 @@ public class comp346pa1driver {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    	
-    	 /*******************************************************************************************************************************************
-    	  * TODO : implement all the operations of main class   																					*
-    	  ******************************************************************************************************************************************/
-        
+
     	Network objNetwork = new Network("network");            /* Activate the network */
     	objNetwork.start();
         Server objServer = new Server();                        /* Start the server */ 

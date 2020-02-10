@@ -326,11 +326,11 @@ public class Server extends Thread{
 
     	processTransactions(trans);
 
-        //get here when the client is disconnected - only happens once both the buffers are empty
-    	//while ((!objNetwork.getClientConnectionStatus().equals("empty"))&&(!objNetwork.getOutBufferStatus().equals("empty"))) {
+        //so that is disconnects only when the receiving client is done receiving
+    	while ((!objNetwork.getClientConnectionStatus().equals("disconnected"))&&(!objNetwork.getOutBufferStatus().equals("empty"))) {
     		//System.out.println("Receiving Client is "+objNetwork.getClientConnectionStatus()+" and Output buffer is "+objNetwork.getOutBufferStatus());
-    		//yield();
-    	//}
+    		yield();
+    	}
     	
     	long serverEndTime=System.currentTimeMillis();
     	System.out.println("\n Terminating server thread - " + " Running time " + (serverEndTime - serverStartTime) + " milliseconds");
